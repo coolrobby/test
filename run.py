@@ -31,7 +31,7 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片
+                # 显示卡片
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
@@ -40,5 +40,21 @@ if input_words:
                     </div>
                     """, unsafe_allow_html=True
                 )
+
+                # 添加按钮来切换图标
+                if 'clicked_' + str(i) not in st.session_state:
+                    st.session_state['clicked_' + str(i)] = False  # 初始化状态
+
+                if st.button("✔", key=f"check_{i}", help="点击切换状态"):
+                    st.session_state['clicked_' + str(i)] = True  # 切换状态为已选中
+
+                if st.button("X", key=f"cross_{i}", help="点击切换状态"):
+                    st.session_state['clicked_' + str(i)] = False  # 切换状态为未选中
+
+                # 根据状态显示图标
+                if st.session_state['clicked_' + str(i)]:
+                    st.write("✔")  # 显示✔
+                else:
+                    st.write("❌")  # 显示X
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
