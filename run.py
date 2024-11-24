@@ -26,24 +26,25 @@ if input_words:
 
         # 在主区域显示卡片布局，每行显示3张卡片
         st.subheader("随机抽取的单词：")
-        
-        # 创建 3 列布局，每列宽度自动平分
-        cols = st.columns(3)
-
-        # 每个卡片的宽度
-        card_width = 280  # 固定宽度，适应大多数屏幕
+        cols = st.columns(3)  # 每行显示3个卡片
 
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片
+                # 使用HTML和CSS为每个单词创建卡片，并增加鼠标悬停时变色的效果
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
-                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
-                    font-size:{font_size}px; width:{card_width}px; word-wrap: break-word;">
+                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;
+                    transition: background-color 0.3s ease, transform 0.2s ease;">
                         <strong>{word}</strong>
                     </div>
+                    <style>
+                        div:hover {{
+                            background-color: #f0f0f0;  /* 鼠标悬停时的背景色 */
+                            transform: scale(1.05);  /* 鼠标悬停时放大卡片 */
+                        }}
+                    </style>
                     """, unsafe_allow_html=True
                 )
 else:
