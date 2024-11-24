@@ -5,7 +5,7 @@ import random
 st.title("单词随机选择器")
 
 # 配置侧边栏
-st.sidebar.title("输入单词")
+st.sidebar.title("操作面板")
 
 # 输入框放在侧边栏
 input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:", height=300)
@@ -24,10 +24,21 @@ if input_words:
         else:
             random_words = word_list  # 如果单词不足10个，则显示所有单词
 
-        # 在主区域显示有序列表（从1开始），字体大小通过 Markdown 设置
+        # 在主区域显示卡片布局，每行显示3张卡片
         st.subheader("随机抽取的单词：")
-        for i, word in enumerate(random_words, 1):
-            # 使用 Markdown 和 HTML 设置动态字体大小
-            st.markdown(f"<p style='font-size:{font_size}px'>{i}. {word}</p>", unsafe_allow_html=True)
+        cols = st.columns(3)  # 每行显示3个卡片
+
+        for i, word in enumerate(random_words):
+            col = cols[i % 3]  # 循环选择每列
+            with col:
+                # 使用HTML和CSS为每个单词创建卡片
+                st.markdown(
+                    f"""
+                    <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
+                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
+                        <strong>{word}</strong>
+                    </div>
+                    """, unsafe_allow_html=True
+                )
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
