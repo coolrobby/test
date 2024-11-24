@@ -50,6 +50,14 @@ if input_words:
                     border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
                         <strong>{word}</strong>
                         <div style="margin-top: 10px;">{st.session_state.correct_answers.get(i, '')}</div>
+                        
+                        <!-- 对错按钮区域 -->
+                        <div style="margin-top: 20px; display: flex; justify-content: space-around;">
+                            <button style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px;"
+                            onclick="window.location.href='#'" id="correct_{i}">对</button>
+                            <button style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px;"
+                            onclick="window.location.href='#'" id="wrong_{i}">错</button>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True
                 )
