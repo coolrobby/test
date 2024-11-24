@@ -27,6 +27,9 @@ if input_words:
 
     # "随机抽取" 按钮在侧边栏
     if st.sidebar.button("随机抽取"):
+        # 点击时，清空当前正确/错误标记，并随机选择单词
+        st.session_state.correct_answers = {}
+        
         if len(word_list) >= 10:
             st.session_state.random_words = random.sample(word_list, 10)  # 从输入的单词中随机选择10个
         else:
@@ -51,9 +54,12 @@ if input_words:
                     """, unsafe_allow_html=True
                 )
 
-                # 在同一行显示 "对" 和 "错" 按钮，并垂直居中
-                col.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
-                col.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
+                # 将“对”和“错”按钮放在同一行，确保按钮居中
+                col1, col2 = col.columns([1, 1])  # 创建两个子列
+                with col1:
+                    col1_button = col1.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
+                with col2:
+                    col2_button = col2.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
 
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
