@@ -21,6 +21,10 @@ if 'score' not in st.session_state:
 if 'correct_answers' not in st.session_state:
     st.session_state.correct_answers = {}
 
+# 初始化抽取的单词列表
+if 'random_words' not in st.session_state:
+    st.session_state.random_words = []
+
 # 显示得分
 st.sidebar.write(f"当前得分：{st.session_state.score}")
 
@@ -31,15 +35,16 @@ if input_words:
     # "随机抽取" 按钮在侧边栏
     if st.sidebar.button("随机抽取"):
         if len(word_list) >= 10:
-            random_words = random.sample(word_list, 10)  # 从输入的单词中随机选择10个
+            st.session_state.random_words = random.sample(word_list, 10)  # 从输入的单词中随机选择10个
         else:
-            random_words = word_list  # 如果单词不足10个，则显示所有单词
+            st.session_state.random_words = word_list  # 如果单词不足10个，则显示所有单词
 
-        # 在主区域显示卡片布局，每行显示3张卡片
+    # 显示已抽取的单词
+    if st.session_state.random_words:
         st.subheader("随机抽取的单词：")
         cols = st.columns(3)  # 每行显示3个卡片
 
-        for i, word in enumerate(random_words):
+        for i, word in enumerate(st.session_state.random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
                 # 使用HTML和CSS为每个单词创建卡片
