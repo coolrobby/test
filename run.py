@@ -63,8 +63,6 @@ if input_words:
                     # 美化“对”按钮
                     col1.button("✔", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i), 
                                 help="标记为对", use_container_width=True, 
-                                key=f"correct_{i}", 
-                                label="✔", 
                                 style="background-color: #4CAF50; color: white; border-radius: 20px; padding: 10px; font-size: 18px;")
 
                 with col2:
