@@ -13,6 +13,10 @@ input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:"
 # 字体大小调节：使用 Slider 控件
 font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_value=50, value=20, step=1)
 
+# 初始化session_state用于存储已选择的状态
+if "selected" not in st.session_state:
+    st.session_state.selected = {}
+
 # 随机抽取的单词显示区域（在主区域显示）
 if input_words:
     word_list = input_words.splitlines()  # 将输入的单词列表转成列表
@@ -24,10 +28,6 @@ if input_words:
         else:
             random_words = word_list  # 如果单词不足10个，则显示所有单词
 
-        # 初始化 session_state 中的每个单词的状态
-        if 'clicked' not in st.session_state:
-            st.session_state['clicked'] = {i: None for i in range(len(random_words))}
-
         # 在主区域显示卡片布局，每行显示3张卡片
         st.subheader("随机抽取的单词：")
         cols = st.columns(3)  # 每行显示3个卡片
@@ -35,7 +35,14 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 显示卡片
+                # 检查当前单词的选择状态
+                selected = st.session_state.selected.get(word, False)
+
+                # 点击卡片时切换状态
+                if st.button(f"{word} {'✔' if selected else ''}", key=f"button_{word}"):
+                    st.session_state.selected[word] = not selected  # 切换选择状态
+
+                # 使用HTML和CSS为每个单词创建卡片
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
@@ -45,18 +52,10 @@ if input_words:
                     """, unsafe_allow_html=True
                 )
 
-                # 切换状态的按钮
-                if st.button("✔", key=f"check_{i}"):
-                    st.session_state['clicked'][i] = True  # 标记为已选中
-                if st.button("X", key=f"cross_{i}"):
-                    st.session_state['clicked'][i] = False  # 标记为未选中
+    # "分数"按钮：显示被选择的卡片数量
+    if st.sidebar.button("分数"):
+        selected_count = sum(1 for selected in st.session_state.selected.values() if selected)
+        st.sidebar.write(f"✔ 的卡片数量: {selected_count}")
 
-                # 根据状态显示图标
-                if st.session_state['clicked'][i] is True:
-                    st.write("✔")  # 显示✔
-                elif st.session_state['clicked'][i] is False:
-                    st.write("❌")  # 显示X
-                else:
-                    st.write("")  # 默认无图标
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
