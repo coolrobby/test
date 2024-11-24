@@ -5,7 +5,7 @@ import random
 st.title("单词随机选择器")
 
 # 配置侧边栏
-st.sidebar.title("操作面板")
+st.sidebar.title("输入单词")
 
 # 输入框放在侧边栏
 input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:", height=300)
@@ -26,7 +26,6 @@ if input_words:
 
         # 在主区域显示有序列表（从1开始），字体大小通过 Markdown 设置
         st.subheader("随机抽取的单词：")
-        st.write("有序列表：")
         for i, word in enumerate(random_words, 1):
             # 使用 Markdown 和 HTML 设置动态字体大小
             st.markdown(f"<p style='font-size:{font_size}px'>{i}. {word}</p>", unsafe_allow_html=True)
