@@ -63,6 +63,13 @@ if input_words:
                     """, unsafe_allow_html=True
                 )
 
+                # 将“对”和“错”按钮放在同一行，确保按钮紧靠且居中
+                col1, col2 = col.columns([1, 1])  # 创建两个子列，比例相同
+                with col1:
+                    col1_button = st.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
+                with col2:
+                    col2_button = st.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
+
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
 
