@@ -31,20 +31,13 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片，并增加鼠标悬停时变色的效果
+                # 使用HTML和CSS为每个单词创建卡片
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
-                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;
-                    transition: background-color 0.3s ease, transform 0.2s ease;">
+                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
                         <strong>{word}</strong>
                     </div>
-                    <style>
-                        div:hover {{
-                            background-color: #f0f0f0;  /* 鼠标悬停时的背景色 */
-                            transform: scale(1.05);  /* 鼠标悬停时放大卡片 */
-                        }}
-                    </style>
                     """, unsafe_allow_html=True
                 )
 else:
