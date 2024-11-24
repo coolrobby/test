@@ -17,6 +17,10 @@ font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_valu
 if 'score' not in st.session_state:
     st.session_state.score = 0
 
+# 初始化单词卡状态
+if 'correct_answers' not in st.session_state:
+    st.session_state.correct_answers = {}
+
 # 显示得分
 st.sidebar.write(f"当前得分：{st.session_state.score}")
 
@@ -44,6 +48,7 @@ if input_words:
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
                     border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
                         <strong>{word}</strong>
+                        <div style="margin-top: 10px;">{st.session_state.correct_answers.get(i, '')}</div>
                     </div>
                     """, unsafe_allow_html=True
                 )
@@ -63,4 +68,3 @@ def mark_correct(index):
 # 处理“错”按钮点击
 def mark_wrong(index):
     st.session_state.correct_answers[index] = 'X'  # 标记为错
-
