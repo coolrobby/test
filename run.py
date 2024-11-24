@@ -25,7 +25,7 @@ if 'random_words' not in st.session_state:
 if input_words:
     word_list = input_words.splitlines()  # 将输入的单词列表转成列表
 
-    # "随机抽取" 按钮在侧边栏
+    # 始终显示 "随机抽取" 按钮
     if st.sidebar.button("随机抽取"):
         if len(word_list) >= 10:
             st.session_state.random_words = random.sample(word_list, 10)  # 从输入的单词中随机选择10个
@@ -40,7 +40,7 @@ if input_words:
         for i, word in enumerate(st.session_state.random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片，卡片内包含"对"和"错"按钮
+                # 显示卡片，并放置“对”和“错”按钮
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
@@ -51,9 +51,9 @@ if input_words:
                         </div>
                         <div style="margin-top: 20px;">
                             <button style="margin-right: 10px; padding: 3px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;" 
-                                    onClick="window.location.reload();">对</button>
+                                    onClick="javascript:document.location.reload()">对</button>
                             <button style="padding: 3px 8px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;" 
-                                    onClick="window.location.reload();">错</button>
+                                    onClick="javascript:document.location.reload()">错</button>
                         </div>
                     </div>
                     """, unsafe_allow_html=True
