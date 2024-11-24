@@ -46,11 +46,13 @@ if input_words:
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
                     border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
                         <strong>{word}</strong>
-                        <div style="margin-top: 10px; font-size: 18px; color: #888;">{st.session_state.correct_answers.get(i, '')}</div>
+                        <div style="margin-top: 10px; font-size: 18px; color: #888;">
+                            {st.session_state.correct_answers.get(i, '')}
+                        </div>
                         <div style="margin-top: 20px;">
-                            <button style="margin-right: 10px; padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;" 
+                            <button style="margin-right: 10px; padding: 3px 8px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;" 
                                     onClick="window.location.reload();">对</button>
-                            <button style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;" 
+                            <button style="padding: 3px 8px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;" 
                                     onClick="window.location.reload();">错</button>
                         </div>
                     </div>
@@ -59,3 +61,11 @@ if input_words:
 
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
+
+# 处理“对”按钮点击
+def mark_correct(index):
+    st.session_state.correct_answers[index] = '✔'  # 标记为对
+
+# 处理“错”按钮点击
+def mark_wrong(index):
+    st.session_state.correct_answers[index] = 'X'  # 标记为错
