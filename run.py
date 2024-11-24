@@ -39,10 +39,7 @@ if input_words:
                 is_selected = st.session_state.selected_words.get(word, False)
 
                 # 显示单词卡片
-                if is_selected:
-                    icon = "✔"
-                else:
-                    icon = ""
+                icon = "✔" if is_selected else ""
 
                 # 使用HTML和CSS为每个单词创建卡片，并添加点击事件来切换状态
                 if st.button(f"{word} {icon}", key=f"word_{i}"):
