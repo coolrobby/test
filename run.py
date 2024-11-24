@@ -13,9 +13,6 @@ input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:"
 # 字体大小调节：使用 Slider 控件
 font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_value=50, value=20, step=1)
 
-# 获取当前显示区域宽度
-width = st.container().width
-
 # 随机抽取的单词显示区域（在主区域显示）
 if input_words:
     word_list = input_words.splitlines()  # 将输入的单词列表转成列表
@@ -27,12 +24,14 @@ if input_words:
         else:
             random_words = word_list  # 如果单词不足10个，则显示所有单词
 
-        # 计算卡片宽度（主区域宽度的1/3）
-        card_width = width // 3 - 40  # 由于卡片之间有一定的间隔，因此减去40
-
         # 在主区域显示卡片布局，每行显示3张卡片
         st.subheader("随机抽取的单词：")
-        cols = st.columns(3)  # 每行显示3个卡片
+        
+        # 创建 3 列布局，每列宽度自动平分
+        cols = st.columns(3)
+
+        # 每个卡片的宽度
+        card_width = 280  # 固定宽度，适应大多数屏幕
 
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
@@ -42,7 +41,7 @@ if input_words:
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
                     border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); 
-                    font-size:{font_size}px; max-width:{card_width}px; word-wrap: break-word;">
+                    font-size:{font_size}px; width:{card_width}px; word-wrap: break-word;">
                         <strong>{word}</strong>
                     </div>
                     """, unsafe_allow_html=True
