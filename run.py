@@ -13,9 +13,12 @@ input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:"
 # 字体大小调节：使用 Slider 控件
 font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_value=50, value=20, step=1)
 
-# 初始化计分
-if 'score' not in st.session_state:
-    st.session_state.score = 0
+# 初始化答对和答错的计数
+if 'correct_count' not in st.session_state:
+    st.session_state.correct_count = 0
+
+if 'wrong_count' not in st.session_state:
+    st.session_state.wrong_count = 0
 
 # 初始化单词卡状态
 if 'correct_answers' not in st.session_state:
@@ -26,7 +29,8 @@ if 'random_words' not in st.session_state:
     st.session_state.random_words = []
 
 # 显示得分
-st.sidebar.write(f"当前得分：{st.session_state.score}")
+st.sidebar.write(f"答对数量：{st.session_state.correct_count}")
+st.sidebar.write(f"答错数量：{st.session_state.wrong_count}")
 
 # 随机抽取的单词显示区域（在主区域显示）
 if input_words:
@@ -58,18 +62,22 @@ if input_words:
                     """, unsafe_allow_html=True
                 )
 
-                # 显示 "对" 和 "错" 按钮
-                col.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
-                col.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
+                # 显示 "对" 和 "错" 按钮在同一行
+                col1, col2 = st.columns([1, 1])  # 分为两个列
+                with col1:
+                    col1_button = st.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
+                with col2:
+                    col2_button = st.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
 
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
 
 # 处理“对”按钮点击
 def mark_correct(index):
-    st.session_state.score += 1
+    st.session_state.correct_count += 1
     st.session_state.correct_answers[index] = '✔'  # 标记为对
 
 # 处理“错”按钮点击
 def mark_wrong(index):
+    st.session_state.wrong_count += 1
     st.session_state.correct_answers[index] = 'X'  # 标记为错
