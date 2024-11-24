@@ -13,9 +13,9 @@ input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:"
 # 字体大小调节：使用 Slider 控件
 font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_value=50, value=20, step=1)
 
-# 初始化session_state用于存储已选择的状态
-if "selected" not in st.session_state:
-    st.session_state.selected = {}
+# 初始化 session_state 来存储已选择的单词的状态
+if 'selected_words' not in st.session_state:
+    st.session_state.selected_words = {}
 
 # 随机抽取的单词显示区域（在主区域显示）
 if input_words:
@@ -35,27 +35,21 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 检查当前单词的选择状态
-                selected = st.session_state.selected.get(word, False)
+                # 判断当前单词是否被选中，若选中则显示“✔”
+                is_selected = st.session_state.selected_words.get(word, False)
 
-                # 点击卡片时切换状态
-                if st.button(f"{word} {'✔' if selected else ''}", key=f"button_{word}"):
-                    st.session_state.selected[word] = not selected  # 切换选择状态
+                # 显示单词卡片
+                icon = "✔" if is_selected else ""
 
-                # 使用HTML和CSS为每个单词创建卡片
-                st.markdown(
-                    f"""
-                    <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
-                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
-                        <strong>{word}</strong>
-                    </div>
-                    """, unsafe_allow_html=True
-                )
+                # 使用HTML和CSS为每个单词创建卡片，并添加点击事件来切换状态
+                if st.button(f"{word} {icon}", key=f"word_{i}"):
+                    # 切换单词的选择状态
+                    st.session_state.selected_words[word] = not is_selected
 
-    # "分数"按钮：显示被选择的卡片数量
-    if st.sidebar.button("分数"):
-        selected_count = sum(1 for selected in st.session_state.selected.values() if selected)
-        st.sidebar.write(f"✔ 的卡片数量: {selected_count}")
-
+    # 显示“分数”按钮
+    if st.sidebar.button("查看分数"):
+        # 计算已选中的单词数量
+        selected_count = sum(st.session_state.selected_words.values())
+        st.sidebar.write(f"已选中的卡片数量：{selected_count}")
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
