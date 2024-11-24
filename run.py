@@ -1,11 +1,14 @@
 import random
 import time
 
-# 计数器
+# 确保计数器和定时器在 session_state 中初始化
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
-# 显示计数器
+if 'timer' not in st.session_state:
+    st.session_state.timer = "00:00"
+
+# 计数器功能
 def increment_counter():
     st.session_state.count += 1
 
@@ -13,7 +16,7 @@ def increment_counter():
 def get_random_words(word_list):
     return random.sample(word_list, 10) if len(word_list) >= 10 else word_list
 
-# 倒计时函数
+# 倒计时功能
 def start_timer(minutes):
     seconds = minutes * 60
     while seconds > 0:
