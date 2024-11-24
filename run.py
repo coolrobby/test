@@ -31,6 +31,10 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
+                # 初始化状态，避免重复点击后状态丢失
+                if f"clicked_{i}" not in st.session_state:
+                    st.session_state[f"clicked_{i}"] = None  # 初始为None，表示未选择
+
                 # 显示卡片
                 st.markdown(
                     f"""
@@ -41,20 +45,16 @@ if input_words:
                     """, unsafe_allow_html=True
                 )
 
-                # 添加按钮来切换图标
-                if 'clicked_' + str(i) not in st.session_state:
-                    st.session_state['clicked_' + str(i)] = False  # 初始化状态
-
-                if st.button("✔", key=f"check_{i}", help="点击切换状态"):
-                    st.session_state['clicked_' + str(i)] = True  # 切换状态为已选中
-
-                if st.button("X", key=f"cross_{i}", help="点击切换状态"):
-                    st.session_state['clicked_' + str(i)] = False  # 切换状态为未选中
+                # 切换状态的按钮
+                if st.button("✔", key=f"check_{i}"):
+                    st.session_state[f"clicked_{i}"] = True  # 标记为已选中
+                if st.button("X", key=f"cross_{i}"):
+                    st.session_state[f"clicked_{i}"] = False  # 标记为未选中
 
                 # 根据状态显示图标
-                if st.session_state['clicked_' + str(i)]:
+                if st.session_state[f"clicked_{i}"] is True:
                     st.write("✔")  # 显示✔
-                else:
+                elif st.session_state[f"clicked_{i}"] is False:
                     st.write("❌")  # 显示X
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
