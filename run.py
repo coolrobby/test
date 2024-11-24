@@ -24,6 +24,10 @@ if input_words:
         else:
             random_words = word_list  # 如果单词不足10个，则显示所有单词
 
+        # 初始化 session_state 中的每个单词的状态
+        if 'clicked' not in st.session_state:
+            st.session_state['clicked'] = {i: None for i in range(len(random_words))}
+
         # 在主区域显示卡片布局，每行显示3张卡片
         st.subheader("随机抽取的单词：")
         cols = st.columns(3)  # 每行显示3个卡片
@@ -31,10 +35,6 @@ if input_words:
         for i, word in enumerate(random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 初始化状态，避免重复点击后状态丢失
-                if f"clicked_{i}" not in st.session_state:
-                    st.session_state[f"clicked_{i}"] = None  # 初始为None，表示未选择
-
                 # 显示卡片
                 st.markdown(
                     f"""
@@ -47,14 +47,16 @@ if input_words:
 
                 # 切换状态的按钮
                 if st.button("✔", key=f"check_{i}"):
-                    st.session_state[f"clicked_{i}"] = True  # 标记为已选中
+                    st.session_state['clicked'][i] = True  # 标记为已选中
                 if st.button("X", key=f"cross_{i}"):
-                    st.session_state[f"clicked_{i}"] = False  # 标记为未选中
+                    st.session_state['clicked'][i] = False  # 标记为未选中
 
                 # 根据状态显示图标
-                if st.session_state[f"clicked_{i}"] is True:
+                if st.session_state['clicked'][i] is True:
                     st.write("✔")  # 显示✔
-                elif st.session_state[f"clicked_{i}"] is False:
+                elif st.session_state['clicked'][i] is False:
                     st.write("❌")  # 显示X
+                else:
+                    st.write("")  # 默认无图标
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
