@@ -13,13 +13,6 @@ input_words = st.sidebar.text_area("请输入单词列表，一行一个单词:"
 # 字体大小调节：使用 Slider 控件
 font_size = st.sidebar.slider("选择显示字体大小", min_value=10, max_value=50, value=20, step=1)
 
-# 初始化答对和答错的计数
-if 'correct_count' not in st.session_state:
-    st.session_state.correct_count = 0
-
-if 'wrong_count' not in st.session_state:
-    st.session_state.wrong_count = 0
-
 # 初始化单词卡状态
 if 'correct_answers' not in st.session_state:
     st.session_state.correct_answers = {}
@@ -28,11 +21,7 @@ if 'correct_answers' not in st.session_state:
 if 'random_words' not in st.session_state:
     st.session_state.random_words = []
 
-# 显示得分
-st.sidebar.write(f"答对数量：{st.session_state.correct_count}")
-st.sidebar.write(f"答错数量：{st.session_state.wrong_count}")
-
-# 随机抽取的单词显示区域（在主区域显示）
+# "随机抽取" 按钮一直显示
 if input_words:
     word_list = input_words.splitlines()  # 将输入的单词列表转成列表
 
@@ -51,33 +40,22 @@ if input_words:
         for i, word in enumerate(st.session_state.random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片
+                # 使用HTML和CSS为每个单词创建卡片，卡片内包含"对"和"错"按钮
                 st.markdown(
                     f"""
                     <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
                     border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
                         <strong>{word}</strong>
-                        <div style="margin-top: 10px;">{st.session_state.correct_answers.get(i, '')}</div>
+                        <div style="margin-top: 10px; font-size: 18px; color: #888;">{st.session_state.correct_answers.get(i, '')}</div>
+                        <div style="margin-top: 20px;">
+                            <button style="margin-right: 10px; padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;" 
+                                    onClick="window.location.reload();">对</button>
+                            <button style="padding: 5px 10px; background-color: #f44336; color: white; border: none; border-radius: 5px; cursor: pointer;" 
+                                    onClick="window.location.reload();">错</button>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True
                 )
 
-                # 显示 "对" 和 "错" 按钮在同一行
-                col1, col2 = st.columns([1, 1])  # 分为两个列
-                with col1:
-                    col1_button = st.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
-                with col2:
-                    col2_button = st.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
-
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
-
-# 处理“对”按钮点击
-def mark_correct(index):
-    st.session_state.correct_count += 1
-    st.session_state.correct_answers[index] = '✔'  # 标记为对
-
-# 处理“错”按钮点击
-def mark_wrong(index):
-    st.session_state.wrong_count += 1
-    st.session_state.correct_answers[index] = 'X'  # 标记为错
