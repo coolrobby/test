@@ -43,23 +43,35 @@ if input_words:
         for i, word in enumerate(st.session_state.random_words):
             col = cols[i % 3]  # 循环选择每列
             with col:
-                # 使用HTML和CSS为每个单词创建卡片
+                # 使用HTML和CSS为每个单词创建卡片，增加圆角和阴影，现代简洁风格
                 st.markdown(
                     f"""
-                    <div style="border: 1px solid #ddd; padding: 20px; margin: 10px; text-align: center;
-                    border-radius: 8px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); font-size:{font_size}px;">
+                    <div style="border: 1px solid #e0e0e0; padding: 20px; margin: 10px; text-align: center;
+                    border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); font-size:{font_size}px;
+                    background-color: #fafafa; color: #333;">
                         <strong>{word}</strong>
-                        <div style="margin-top: 10px;">{st.session_state.correct_answers.get(i, '')}</div>
+                        <div style="margin-top: 15px; font-size: 16px; color: #888;">
+                            {st.session_state.correct_answers.get(i, '')}
+                        </div>
                     </div>
                     """, unsafe_allow_html=True
                 )
 
-                # 将“对”和“错”按钮放在同一行，确保按钮居中
+                # 通过创建子列将“对”和“错”按钮放在同一行，并且使其在视觉上更好看
                 col1, col2 = col.columns([1, 1])  # 创建两个子列
                 with col1:
-                    col1_button = col1.button("对", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i))
+                    # 美化“对”按钮
+                    col1.button("✔", key=f"correct_{i}", on_click=lambda i=i: mark_correct(i), 
+                                help="标记为对", use_container_width=True, 
+                                key=f"correct_{i}", 
+                                label="✔", 
+                                style="background-color: #4CAF50; color: white; border-radius: 20px; padding: 10px; font-size: 18px;")
+
                 with col2:
-                    col2_button = col2.button("错", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i))
+                    # 美化“错”按钮
+                    col2.button("✘", key=f"wrong_{i}", on_click=lambda i=i: mark_wrong(i), 
+                                help="标记为错", use_container_width=True,
+                                style="background-color: #f44336; color: white; border-radius: 20px; padding: 10px; font-size: 18px;")
 
 else:
     st.sidebar.write("请输入单词列表并点击右侧的按钮进行随机选择。")
@@ -70,4 +82,4 @@ def mark_correct(index):
 
 # 处理“错”按钮点击
 def mark_wrong(index):
-    st.session_state.correct_answers[index] = 'X'  # 标记为错
+    st.session_state.correct_answers[index] = '✘'  # 标记为错
