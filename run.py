@@ -1,7 +1,8 @@
 import random
 import time
+import streamlit as st  # Ensure streamlit is imported if using Streamlit Cloud
 
-# 确保计数器和定时器在 session_state 中初始化
+# 在 session_state 中初始化计数器和定时器
 if 'count' not in st.session_state:
     st.session_state.count = 0
 
